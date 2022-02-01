@@ -28,18 +28,21 @@ namespace ReleaseChecker
 
         private void AddToken1_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrEmpty(this.TokenName.ToString()) || string.IsNullOrEmpty(this.TokenValue.ToString())) return;
-
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
-            config.AppSettings.Settings.Add(this.TokenName.ToString(), this.TokenValue.ToString());
-            config.Save(ConfigurationSaveMode.Modified);
-            
+            if (string.IsNullOrEmpty(this.TokenName.Text.ToString()) || string.IsNullOrEmpty(this.TokenValue.Text.ToString())) {
+                this.Message.Content = "Please provide all the details.";
+                return; 
+            }
+            SaveToken();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveToken()
         {
-
+            XmlHelper.SaveXml(ConfigurationManager.AppSettings["TokenConfigPath"].ToString()
+                                , "TokenConfig"
+                                , new KeyValuePair<string, string>(this.TokenName.Text.ToString(), this.TokenValue.Text.ToString()));
+            this.TokenName.Clear();
+            this.TokenValue.Clear();
+            this.Message.Content = "Successfully added the provided token.";
         }
     }
 }

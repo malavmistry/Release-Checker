@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,10 +22,23 @@ namespace ReleaseChecker
         public ReleaseCheckerForm()
         {
             InitializeComponent();
+            CheckRequiredFileDirectoryExists();
             LoadSSHKeys();
             AppendMessageText("Start by providing GIT Token..");
         }
 
+        public void CheckRequiredFileDirectoryExists() 
+        {
+            string filePath = ConfigurationManager.AppSettings["TokenConfigPath"];
+            if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            }
+            if (!File.Exists(filePath))
+            {
+                XmlHelper.CreateNewXmlFile(filePath,"TokenConfig");
+            }
+        }
         private void compareBtn_Click(object sender, EventArgs e)
         {
             if (!Validate())
@@ -135,7 +149,7 @@ namespace ReleaseChecker
                 str.Append(@"\cellx8400 ");
                 str.Append(@"\cellx9400 ");
                 str.Append(data.Commits[i].Sha + @"\intbl\cell ");
-                str.Append(data.Commits[i].Message.Message.Substring(0,11) + @"\intbl\cell ");
+                str.Append(data.Commits[i].Message.Message.Substring(0, data.Commits[i].Message.Message.IndexOf(" ")) + @"\intbl\cell ");
                 str.Append(data.Commits[i].Message.Message + @"\intbl\cell ");
                 str.Append( @"3.17.71 \intbl\cell ");
                 str.Append(@"\row");
@@ -255,16 +269,21 @@ namespace ReleaseChecker
         {
             var token = this.SshList.Text.ToString();
             if (this.SshList.SelectedIndex <= 0) return "";
-            var keys = (NameValueCollection)ConfigurationManager.GetSection("TokenConfig");
-            return keys[token];
+            var keys = XmlHelper.ReadXml(ConfigurationManager.AppSettings["TokenConfigPath"].ToString(), "TokenConfig");
+            var key = keys.FirstOrDefault(x => x["key"] == token)["value"].ToString();
+            if (string.IsNullOrEmpty(key)) {
+                EnableError("No repositories found for given token..");
+                return "";
+            }
+            return key;
         }
         private void LoadSSHKeys()
         {
-            var keys = (NameValueCollection)ConfigurationManager.GetSection("TokenConfig");
+            var keys = XmlHelper.ReadXml(ConfigurationManager.AppSettings["TokenConfigPath"].ToString(), "TokenConfig");
             var sshList = new List<string>();
             sshList.Add("--Select One--");
             foreach (var key in keys) {
-                sshList.Add(key.ToString());
+                sshList.Add(key["key"].ToString());
             }
 
             sshList.Add("--Add New Token--");
