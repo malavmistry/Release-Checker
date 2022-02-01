@@ -197,14 +197,16 @@ namespace ReleaseChecker
             this.SshList.Name = "SshList";
             this.SshList.Size = new System.Drawing.Size(151, 26);
             this.SshList.TabIndex = 16;
-            this.SshList.SelectedValueChanged += new System.EventHandler(this.SshTextChanged);
+            //this.SshList.SelectedValueChanged += new System.EventHandler(this.SshTextChanged);
+            this.SshList.SelectedIndexChanged += new System.EventHandler(this.SshTextChanged);
+            //this.SshList.SelectionChangeCommitted += new System.EventHandler(this.SshTextChanged);
             // 
             // ReleaseCheckerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(691, 506);
+            this.ClientSize = new System.Drawing.Size(702, 517);
             this.ControlBox = false;
             this.Controls.Add(this.SshList);
             this.Controls.Add(this.compareBranchList);
