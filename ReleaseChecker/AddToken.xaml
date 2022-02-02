@@ -7,11 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="145" d:DesignWidth="279" Height="Auto" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
     <Grid Width="279" Height="145" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <Canvas HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="279" Visibility= "Visible" Background="#FF252525">
+        <Canvas HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="279" Visibility= "Visible" Background="#404040">
             <Button x:Name="AddToken1" Content="Add" Height="22" Canvas.Left="100" Canvas.Top="112" Width="77" Click="AddToken1_Click"/>
             <Button Content="Cancel" Height="22" Canvas.Left="191" Canvas.Top="112" Width="76" IsCancel="True" />
-            <TextBox x:Name="TokenName" Height="22" Canvas.Left="100" TextWrapping="Wrap" Canvas.Top="16" Width="167"/>
-            <TextBox x:Name="TokenValue" Height="22" Canvas.Left="100" TextWrapping="Wrap" Canvas.Top="54" Width="167" RenderTransformOrigin="0.505,0.537"/>
+            <TextBox x:Name="TokenName" Height="22" Canvas.Left="100"  Canvas.Top="16" Width="167"/>
+            <TextBox x:Name="TokenValue" Height="22" Canvas.Left="100" Canvas.Top="54" Width="167" RenderTransformOrigin="0.505,0.537"/>
             <Label Content="Token Name" Height="31" Canvas.Left="10" Canvas.Top="13" Width="85" Background="{x:Null}" Foreground="White"/>
             <Label Content="Token Value" Height="31" Canvas.Left="10" Canvas.Top="52" Width="85" Background="{x:Null}" Foreground="White"/>
         </Canvas>
