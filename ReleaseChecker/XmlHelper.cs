@@ -10,7 +10,7 @@ namespace ReleaseChecker
 {
     class XmlHelper
     {
-        public static List<Dictionary<string,string>> ReadXml(string file, string node)
+        public static List<Dictionary<string, string>> ReadXml(string file, string node)
         {
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(file);
@@ -19,16 +19,18 @@ namespace ReleaseChecker
             foreach (XmlNode aNode in aNodes[0].ChildNodes)
             {
                 var dict = new Dictionary<string, string>();
-                foreach (XmlAttribute attribute in aNode.Attributes) {
-                    dict.Add(attribute.Name,attribute.Value);
+                foreach (XmlAttribute attribute in aNode.Attributes)
+                {
+                    dict.Add(attribute.Name, attribute.Value);
                 }
                 fileData.Add(dict);
             }
             return fileData;
         }
-        public static void SaveXml(string file, string node, KeyValuePair<string, string> data) {
+        public static void SaveXml(string file, string node, KeyValuePair<string, string> data)
+        {
             var fileData = ReadXml(file, node);
-            if (fileData.Any(x=> x["key"] == data.Value))
+            if (fileData.Any(x => x["key"] == data.Value))
                 throw new ApplicationException($"Token name: {data.Value} already exists");
 
             XmlDocument xmldoc = new XmlDocument();
@@ -50,6 +52,23 @@ namespace ReleaseChecker
                 writer.Formatting = Formatting.Indented;
                 doc.Save(writer);
             }
+        }
+        public static void DeleteXmlRecord(string file, string node, string value)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(file);
+            XmlNodeList aNodes = xmldoc.SelectNodes(node);
+            foreach (XmlNode aNode in aNodes[0].ChildNodes)
+            {
+                foreach (XmlAttribute attribute in aNode.Attributes)
+                {
+                    if (attribute.Value == value) {
+                        aNodes[0].RemoveChild(aNode);
+                        break;
+                    }
+                }
+            }
+            xmldoc.Save(file);
         }
     }
 }

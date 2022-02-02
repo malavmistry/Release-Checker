@@ -5,17 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReleaseChecker"
              mc:Ignorable="d" 
-             d:DesignHeight="145" d:DesignWidth="279" Height="Auto" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
-    <Grid Width="279" Height="145" HorizontalAlignment="Left" VerticalAlignment="Top" >
-        <Canvas HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="279" Visibility= "Visible" Background="#404040">
-            <Button x:Name="AddToken1" Content="Add" Height="22" Canvas.Left="100" Canvas.Top="112" Width="77" Click="AddToken1_Click"/>
-            <Button Content="Cancel" Height="22" Canvas.Left="191" Canvas.Top="112" Width="76" IsCancel="True" />
-            <TextBox x:Name="TokenName" Height="22" Canvas.Left="100"  Canvas.Top="16" Width="167"/>
-            <TextBox x:Name="TokenValue" Height="22" Canvas.Left="100" Canvas.Top="54" Width="167" RenderTransformOrigin="0.505,0.537"/>
-            <Label Content="Token Name" Height="31" Canvas.Left="10" Canvas.Top="13" Width="85" Background="{x:Null}" Foreground="White"/>
-            <Label Content="Token Value" Height="31" Canvas.Left="10" Canvas.Top="52" Width="85" Background="{x:Null}" Foreground="White"/>
+             d:DesignHeight="160" d:DesignWidth="279" Height="Auto" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Width="279" Height="160" HorizontalAlignment="Left" VerticalAlignment="Top" >
+        <Canvas HorizontalAlignment="Left" Height="160" VerticalAlignment="Top" Width="279" Visibility= "Visible" Background="#404040">
+            <Button x:Name="AddToken1" Content="Add" Height="22" Canvas.Left="100" Canvas.Top="132" Width="77" Click="AddToken1_Click"/>
+            <Button x:Name="DeleteToken" Content="Delete" Height="22" Canvas.Left="100" Canvas.Top="132" Width="77" Click="DeleteToken_Click"/>
+            <Button Content="Cancel" Height="22" Canvas.Left="191" Canvas.Top="132" Width="76" IsCancel="True" />
+            <TextBox x:Name="TokenName" Height="22" Canvas.Left="100"  Canvas.Top="40" Width="166"/>
+            <TextBox x:Name="TokenValue" Height="22" Canvas.Left="100" Canvas.Top="75" Width="167" RenderTransformOrigin="0.505,0.537"/>
+            <ComboBox x:Name="TokenNameList" HorizontalAlignment="Left" VerticalAlignment="Center" Height="22" Canvas.Left="100" Canvas.Top="40" Width="166" Background="White"/>
+            <Label Content="Token Name" Height="30" Canvas.Left="10" Canvas.Top="40" Width="85" Background="{x:Null}" Foreground="White"/>
+            <Label Content="Token Value" Height="30" Canvas.Left="10" Canvas.Top="74" Width="85" Background="{x:Null}" Foreground="White"/>
+            <Label Content="" x:Name="Message" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="25" Background="{x:Null}" Foreground="White" Canvas.Left="10" Canvas.Top="102"/>
+            <RadioButton Content="Add" Height="30" Canvas.Left="100" Canvas.Top="9" Width="74" Background="White" Foreground="White" IsChecked="True" BorderBrush="White" Checked="RadioButton_Checked"/>
+            <RadioButton Content="Delete" Height="30" Canvas.Left="176" Canvas.Top="9" Width="88" Background="White" Foreground="White" BorderBrush="#FFF9F9F9" Checked="RadioButton_Checked"/>
         </Canvas>
-        <Label Content="" x:Name="Message" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,82,0,0" Width="259" Height="25" Background="{x:Null}" Foreground="White"/>
-
     </Grid>
 </UserControl>
