@@ -44,6 +44,8 @@ namespace ReleaseChecker
             this.baseBranchList = new System.Windows.Forms.ComboBox();
             this.compareBranchList = new System.Windows.Forms.ComboBox();
             this.SshList = new System.Windows.Forms.ComboBox();
+            this.UpdateToken = new System.Windows.Forms.Button();
+            this.DownloadExcel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // repoName
@@ -80,7 +82,7 @@ namespace ReleaseChecker
             // 
             this.compareBranch.AutoSize = true;
             this.compareBranch.ForeColor = System.Drawing.Color.White;
-            this.compareBranch.Location = new System.Drawing.Point(291, 84);
+            this.compareBranch.Location = new System.Drawing.Point(291, 83);
             this.compareBranch.Name = "compareBranch";
             this.compareBranch.Size = new System.Drawing.Size(106, 18);
             this.compareBranch.TabIndex = 3;
@@ -127,10 +129,10 @@ namespace ReleaseChecker
             this.compareBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.compareBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.compareBtn.ForeColor = System.Drawing.Color.Black;
-            this.compareBtn.Location = new System.Drawing.Point(591, 31);
+            this.compareBtn.Location = new System.Drawing.Point(305, 117);
             this.compareBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.compareBtn.Name = "compareBtn";
-            this.compareBtn.Size = new System.Drawing.Size(98, 34);
+            this.compareBtn.Size = new System.Drawing.Size(120, 30);
             this.compareBtn.TabIndex = 8;
             this.compareBtn.Text = "Compare";
             this.compareBtn.UseVisualStyleBackColor = false;
@@ -138,11 +140,11 @@ namespace ReleaseChecker
             // 
             // MessageBox
             // 
-            this.MessageBox.Location = new System.Drawing.Point(12, 137);
+            this.MessageBox.Location = new System.Drawing.Point(12, 155);
             this.MessageBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MessageBox.Name = "MessageBox";
             this.MessageBox.ReadOnly = true;
-            this.MessageBox.Size = new System.Drawing.Size(678, 368);
+            this.MessageBox.Size = new System.Drawing.Size(552, 350);
             this.MessageBox.TabIndex = 10;
             this.MessageBox.Text = "Welcome!!";
             // 
@@ -150,9 +152,9 @@ namespace ReleaseChecker
             // 
             this.exitBtn.BackColor = System.Drawing.Color.White;
             this.exitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.exitBtn.Location = new System.Drawing.Point(591, 77);
+            this.exitBtn.Location = new System.Drawing.Point(445, 118);
             this.exitBtn.Name = "exitBtn";
-            this.exitBtn.Size = new System.Drawing.Size(98, 30);
+            this.exitBtn.Size = new System.Drawing.Size(120, 30);
             this.exitBtn.TabIndex = 11;
             this.exitBtn.Text = "Exit";
             this.exitBtn.UseVisualStyleBackColor = false;
@@ -184,7 +186,7 @@ namespace ReleaseChecker
             this.compareBranchList.AllowDrop = true;
             this.compareBranchList.Enabled = false;
             this.compareBranchList.FormattingEnabled = true;
-            this.compareBranchList.Location = new System.Drawing.Point(413, 82);
+            this.compareBranchList.Location = new System.Drawing.Point(413, 81);
             this.compareBranchList.Name = "compareBranchList";
             this.compareBranchList.Size = new System.Drawing.Size(151, 26);
             this.compareBranchList.TabIndex = 15;
@@ -197,17 +199,50 @@ namespace ReleaseChecker
             this.SshList.Name = "SshList";
             this.SshList.Size = new System.Drawing.Size(151, 26);
             this.SshList.TabIndex = 16;
-            //this.SshList.SelectedValueChanged += new System.EventHandler(this.SshTextChanged);
             this.SshList.SelectedIndexChanged += new System.EventHandler(this.SshTextChanged);
-            //this.SshList.SelectionChangeCommitted += new System.EventHandler(this.SshTextChanged);
+            // 
+            // UpdateToken
+            // 
+            this.UpdateToken.BackColor = System.Drawing.Color.White;
+            this.UpdateToken.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.UpdateToken.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.UpdateToken.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.UpdateToken.ForeColor = System.Drawing.Color.Black;
+            this.UpdateToken.Location = new System.Drawing.Point(16, 117);
+            this.UpdateToken.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.UpdateToken.Name = "UpdateToken";
+            this.UpdateToken.Size = new System.Drawing.Size(120, 30);
+            this.UpdateToken.TabIndex = 18;
+            this.UpdateToken.Text = "Update Token";
+            this.UpdateToken.UseVisualStyleBackColor = false;
+            this.UpdateToken.Click += new System.EventHandler(this.UpdateToken_Click);
+            // 
+            // DownloadExcel
+            // 
+            this.DownloadExcel.BackColor = System.Drawing.Color.White;
+            this.DownloadExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.DownloadExcel.Enabled = false;
+            this.DownloadExcel.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.DownloadExcel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.DownloadExcel.ForeColor = System.Drawing.Color.Black;
+            this.DownloadExcel.Location = new System.Drawing.Point(162, 117);
+            this.DownloadExcel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.DownloadExcel.Name = "DownloadExcel";
+            this.DownloadExcel.Size = new System.Drawing.Size(120, 30);
+            this.DownloadExcel.TabIndex = 19;
+            this.DownloadExcel.Text = "Download Excel";
+            this.DownloadExcel.UseVisualStyleBackColor = false;
+            this.DownloadExcel.Click += new System.EventHandler(this.DownloadExcel_Click);
             // 
             // ReleaseCheckerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(702, 517);
+            this.ClientSize = new System.Drawing.Size(574, 513);
             this.ControlBox = false;
+            this.Controls.Add(this.DownloadExcel);
+            this.Controls.Add(this.UpdateToken);
             this.Controls.Add(this.SshList);
             this.Controls.Add(this.compareBranchList);
             this.Controls.Add(this.baseBranchList);
@@ -254,6 +289,8 @@ namespace ReleaseChecker
         private System.Windows.Forms.ComboBox baseBranchList;
         private System.Windows.Forms.ComboBox compareBranchList;
         private System.Windows.Forms.ComboBox SshList;
+        private System.Windows.Forms.Button UpdateToken;
+        private System.Windows.Forms.Button DownloadExcel;
     }
 }
 

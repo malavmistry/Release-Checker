@@ -38,6 +38,11 @@ namespace ReleaseChecker
             {
                 XmlHelper.CreateNewXmlFile(filePath,"TokenConfig");
             }
+            filePath = ConfigurationManager.AppSettings["DownloadPath"];
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
         }
         private void compareBtn_Click(object sender, EventArgs e)
         {
@@ -123,6 +128,7 @@ namespace ReleaseChecker
             var tabularData = GetTabularData(compareInfo, baseBranch, compareBranch);
             this.MessageBox.Text = "";
             this.MessageBox.Rtf =tabularData;
+            this.DownloadExcel.Enabled = true;
     }
         public string GetTabularData(CompareInfo data, string baseBranch, string compareBranch) {
             string resultMessage = string.Empty;
@@ -130,13 +136,16 @@ namespace ReleaseChecker
                 resultMessage = $"{baseBranch} branch is ahead of {compareBranch} branch by {data.Ahead_by} commits and behind of {compareBranch} branch by {data.Behind_by} commits.";
             else resultMessage = $"{baseBranch} is {data.Status} of {compareBranch} by {data.Commits.Count()} commits.";
             StringBuilder str = new StringBuilder();
+            int size = this.MessageBox.Width;
             str.Append(@"{\rtf1 ");
             str.Append(resultMessage);
             str.Append(@"\trowd");
-            str.Append(@"\cellx2200 ");
-            str.Append(@"\cellx3700 ");
-            str.Append(@"\cellx8400 ");
-            str.Append(@"\cellx9400 ");
+            str.Append(@"\cellx0 ");
+            str.Append($@"\cellx{Math.Round(size*3.96)} ");
+            str.Append($@"\cellx{Math.Round(size * 6.7)} ");
+            str.Append($@"\cellx{Math.Round(size * 12.14)} ");
+            str.Append($@"\cellx{Math.Round(size * 14.86)} ");
+            str.Append(@" \intbl\cell ");
             str.Append(@" Commit ID\intbl\cell ");
             str.Append(@" JIRA\intbl\cell ");
             str.Append(@" Message\intbl\cell ");
@@ -144,10 +153,12 @@ namespace ReleaseChecker
             str.Append(@"\row");
             for (int i = 0; i < data.Commits.Count(); i++) {
                 str.Append(@"\trowd");
-                str.Append(@"\cellx2200 ");
-                str.Append(@"\cellx3700 ");
-                str.Append(@"\cellx8400 ");
-                str.Append(@"\cellx9400 ");
+                str.Append(@"\cellx0 ");
+                str.Append($@"\cellx{Math.Round(size * 3.96)} ");
+                str.Append($@"\cellx{Math.Round(size * 6.7)} ");
+                str.Append($@"\cellx{Math.Round(size * 12.14)} ");
+                str.Append($@"\cellx{Math.Round(size * 14.86)} ");
+                str.Append(@" \intbl\cell ");
                 str.Append(data.Commits[i].Sha + @"\intbl\cell ");
                 str.Append(data.Commits[i].Message.Message.Substring(0, data.Commits[i].Message.Message.IndexOf(" ")) + @"\intbl\cell ");
                 str.Append(data.Commits[i].Message.Message + @"\intbl\cell ");
@@ -246,24 +257,9 @@ namespace ReleaseChecker
         private void SshTextChanged(object sender, EventArgs e)
         {
             DisableSelection();
-            if (this.SshList.Text.ToString() == "--Add New Token--")
-            {
-                var _addTokenWindow = new AddToken();
-                _addTokenWindow.BringIntoView();
-                Window popWindow = new Window();
-                popWindow.Content = _addTokenWindow;
-                popWindow.SizeToContent = SizeToContent.WidthAndHeight;
-                popWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                popWindow.ShowDialog();
-                DisableSelection();
-                LoadSSHKeys();
-            }
-            else
-            {
-                authString = GetAuthTokenFromName();
-                if (string.IsNullOrEmpty(authString) || !Authenticate()) return;
-                fetchRepos();
-            }
+            authString = GetAuthTokenFromName();
+            if (string.IsNullOrEmpty(authString) || !Authenticate()) return;
+            fetchRepos();
         }
         private string GetAuthTokenFromName()
         {
@@ -285,8 +281,6 @@ namespace ReleaseChecker
             foreach (var key in keys) {
                 sshList.Add(key["key"].ToString());
             }
-
-            sshList.Add("--Add New Token--");
             this.SshList.DataSource = sshList;
         }
         private void fetchRepos()
@@ -330,10 +324,52 @@ namespace ReleaseChecker
             this.compareBranchList.Enabled = false;
             this.baseBranchList.DataSource = null;
             this.compareBranchList.DataSource = null;
+            this.DownloadExcel.Enabled = false;
         }
         private void exitBtn_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void UpdateToken_Click(object sender, EventArgs e)
+        {
+            var _addTokenWindow = new AddToken();
+            _addTokenWindow.BringIntoView();
+            Window popWindow = new Window();
+            popWindow.Content = _addTokenWindow;
+            popWindow.SizeToContent = SizeToContent.WidthAndHeight;
+            popWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            popWindow.ShowDialog();
+            DisableSelection();
+            LoadSSHKeys();
+        }
+
+        private void DownloadExcel_Click(object sender, EventArgs e)
+        {
+            var repo = GetRepoByName(this.repoList.Text);
+            var compareInfo = GetCompareInfo(repo.Url, this.baseBranchList.Text, this.compareBranchList.Text);
+            SaveCSVFile(compareInfo, this.baseBranchList.Text, this.compareBranchList.Text);
+            CompareCommits(repo.Url, this.baseBranchList.Text, this.compareBranchList.Text);
+        }
+        private void SaveCSVFile(CompareInfo data, string baseBranch, string compareBranch)
+        {
+            StringBuilder fileData = new StringBuilder();
+            string resultMessage = string.Empty;
+            if (data.Status.ToLower() == "diverged")
+                resultMessage = $"{baseBranch} branch is ahead of {compareBranch} branch by {data.Ahead_by} commits and behind of {compareBranch} branch by {data.Behind_by} commits.";
+            else resultMessage = $"{baseBranch} is {data.Status} of {compareBranch} by {data.Commits.Count()} commits.";
+            fileData.AppendLine(resultMessage);
+            var headers = "CommitID, JIRA, Message, Release";
+            fileData.AppendLine(headers);
+
+            for (int i = 0; i < data.Commits.Count(); i++)
+            {
+                var lineData = $"{data.Commits[i].Sha},{data.Commits[i].Message.Message.Substring(0, data.Commits[i].Message.Message.IndexOf(" "))}, \"{data.Commits[i].Message.Message}\",3.17.71";
+                fileData.AppendLine(lineData);
+            }
+            string fileName = $"{ConfigurationManager.AppSettings["DownloadPath"]}\\GitComparison_{baseBranch}_{compareBranch}_{DateTime.Now.ToString("MMddyyyy")}.csv";
+            File.WriteAllText(fileName, fileData.ToString());
+            System.Diagnostics.Process.Start(fileName);
         }
     }
 }
